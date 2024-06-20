@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp PDF Generator</title>
+</head>
+<body>
+  <h1>WhatsApp PDF Generator</h1>
+  <button id="select-zip">Select WhatsApp ZIP</button>
+  <p id="zip-path"></p>
+  <button id="generate-pdf" disabled>Generate PDF</button>
+  <div id="output"></div>
+
+  <script>
+    const selectZipButton = document.getElementById('select-zip');
+    const generatePdfButton = document.getElementById('generate-pdf');
+    const zipPathText = document.getElementById('zip-path');
+    const outputDiv = document.getElementById('output');
+
+    let zipPath = '';
+
+    selectZipButton.addEventListener('click', async () => {
+      zipPath = await window.api.selectZip();
+      zipPathText.textContent = `Selected ZIP: ${zipPath}`;
+      generatePdfButton.disabled = !zipPath;
+    });
+
+    generatePdfButton.addEventListener('click', async () => {
+      if (zipPath) {
+        const outputDir = await window.api.generatePdf(zipPath);
+        outputDiv.textContent = `PDFs generated in: ${outputDir}`;
+      }
+    });
+  </script>
+</body>
+</html>
